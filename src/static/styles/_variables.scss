@@ -1,23 +1,25 @@
 :root {
   /* Colors */
-  --primary: #ff5722;
-  --primary-hover: #e64a19;
+  --primary: #2ca845;
+  --primary-hover: #32be4e;
 
-
-  --bg-dark: #121212;
+  /* Minecraft Dark Gray Palette */
+  --bg-dark: #242424;
+  --bg-sidebar: #181818;
+  --bg-content: #272727;
   --text-main: #ffffff;
   --text-muted: #aaaaaa;
 
-  /* Glassmorphism */
-  --glass-bg: rgba(30, 30, 30, 0.65);
+  /* Solid Panels & Cards */
+  --glass-bg: #1e1e1e;
   --glass-border: rgba(255, 255, 255, 0.08);
-  --glass-blur: 12px;
+  --glass-blur: 0px;
 
   /* Shadows */
   --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
 
   /* Layout */
-  --sidebar-width: 400px;
+  --sidebar-width: 380px;
 
   /* UI System */
   --btn-radius: 5px;

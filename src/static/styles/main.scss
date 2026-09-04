@@ -36,18 +36,8 @@ a {
 .app-background {
   position: absolute;
   inset: 0;
-  // background-image: url('/src/assets/bg.jpg');
-  background-size: cover;
-  background-position: center;
+  background: var(--bg-dark);
   z-index: -1;
-
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(8px);
-  }
 }
 
 /* --- Views Management --- */
@@ -113,16 +103,16 @@ a {
   }
 }
 
-/* Primary Button (Orange) */
+/* Primary Button (Minecraft Green) */
 .btn-primary {
   background: var(--primary);
   color: white;
-  box-shadow: 0 4px 10px rgba(255, 87, 34, 0.3);
+  box-shadow: 0 4px 10px rgba(44, 168, 69, 0.3);
 
   &:hover:not(:disabled) {
     background: var(--primary-hover);
     transform: translateY(-1px);
-    box-shadow: 0 6px 15px rgba(255, 87, 34, 0.4);
+    box-shadow: 0 6px 15px rgba(44, 168, 69, 0.4);
   }
 
   &:active:not(:disabled) {
@@ -182,7 +172,7 @@ a {
 
   &:hover {
     color: var(--primary);
-    background: rgba(255, 87, 34, 0.1);
+    background: rgba(44, 168, 69, 0.1);
   }
 }
 
