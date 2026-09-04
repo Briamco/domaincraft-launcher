@@ -1,14 +1,10 @@
-# EML Template
+# Dominio Launcher
 
-**EML Template is the reference boilerplate for building a modern, fast, and cross-platform Minecraft Launcher.**
+**Dominio Launcher es un lanzador moderno, rápido y multiplataforma para Minecraft.**
 
-Powered by <a href="https://github.com/Electron-Minecraft-Launcher/EML-Lib-v2"><b>EML Lib</b></a> • Configurable via <a href="https://github.com/Electron-Minecraft-Launcher/EML-AdminTool-v2"><b>EML AdminTool</b></a>
+Powered by <a href="https://github.com/Electron-Minecraft-Launcher/EML-Lib-v2"><b>EML Lib</b></a>
 
-![EML Template](./.github/assets/screenshot.png)
-
-[<p align="center"><img src="https://img.shields.io/badge/Discord-EML-5561e6?&style=for-the-badge">](https://emlproject.com/discord/github)
-[<img src="https://img.shields.io/badge/platforms-Windows,_macOS,_Linux-0077DA?style=for-the-badge&color=0077DA">](#platforms)
-[<img src="https://img.shields.io/badge/version-1.2.0-orangered?style=for-the-badge&color=orangered">](package.json)</p>
+[<img src="https://img.shields.io/badge/version-0.1.0-2ca845?style=for-the-badge&color=2ca845">](package.json)</p>
 
 <p>
 <center>

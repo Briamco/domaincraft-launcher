@@ -12,8 +12,8 @@ import logger from 'electron-log/main'
 import { registerProfilesHandlers } from './handlers/profiles'
 import { registerSkinHandlers } from './handlers/skin'
 
-const APP_TITLE = 'EML Template'
-const BG_COLOR = '#121212'
+const APP_TITLE = 'Dominio Launcher'
+const BG_COLOR = '#242424'
 
 let mainWindow: BrowserWindow | null = null
 
@@ -49,7 +49,7 @@ function createWindow() {
     return { action: 'deny' }
   })
 
-  // mainWindow.removeMenu()
+  mainWindow.removeMenu()
 
   mainWindow.once('ready-to-show', () => {
     mainWindow?.show()
@@ -66,30 +66,30 @@ function configureAppMenu() {
   app.setAboutPanelOptions({
     applicationName: APP_TITLE,
     applicationVersion: app.getVersion(),
-    version: 'Build 2026.1',
-    copyright: 'Copyright © 2026 EML',
-    credits: 'Developed with EML Lib & Electron',
+    version: '0.1.0',
+    copyright: 'Copyright © 2026 Dominio Launcher',
+    credits: 'Powered by EML & Electron',
     iconPath: path.join(__dirname, '../build/icon.png')
   })
 
   const template: any[] = [
     ...(process.platform === 'darwin'
       ? [
-          {
-            label: app.name,
-            submenu: [
-              { role: 'about' },
-              { type: 'separator' },
-              { role: 'services' },
-              { type: 'separator' },
-              { role: 'hide' },
-              { role: 'hideOthers' },
-              { role: 'unhide' },
-              { type: 'separator' },
-              { role: 'quit' }
-            ]
-          }
-        ]
+        {
+          label: app.name,
+          submenu: [
+            { role: 'about' },
+            { type: 'separator' },
+            { role: 'services' },
+            { type: 'separator' },
+            { role: 'hide' },
+            { role: 'hideOthers' },
+            { role: 'unhide' },
+            { type: 'separator' },
+            { role: 'quit' }
+          ]
+        }
+      ]
       : []),
 
     {
