@@ -10,6 +10,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "generate:modpack": "node scripts/generate-modpack.js",
     "release:win": "npm run build && electron-builder --win",
     "release:mac": "npm run build && electron-builder --mac",
     "release:lin": "npm run build && electron-builder --linux"

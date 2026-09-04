@@ -3,25 +3,36 @@ import { Launcher } from 'eml-lib'
 import type { Account } from 'eml-lib'
 import type { IGameSettings } from './settings'
 import logger from 'electron-log/main'
+import { LAUNCHER_CONFIG } from '../config'
 
 export function registerLauncherHandlers(mainWindow: BrowserWindow) {
   ipcMain.handle('game:launch', (_event, payload: { account: Account; settings: IGameSettings; profileSlug?: string }) => {
     const { account, settings } = payload
     const java = settings.java === 'system' ? { install: 'manual' as const, absolutePath: 'java' } : { install: 'auto' as const }
-    logger.log('Launching')
+    logger.log('Launching game instance...')
+
+    const hasModpack = Boolean(
+      LAUNCHER_CONFIG.modpackUrl &&
+      !LAUNCHER_CONFIG.modpackUrl.includes('tudominio.com')
+    )
+
+    if (hasModpack) {
+      logger.log(`Modpack manifest configured from CDN: ${LAUNCHER_CONFIG.modpackUrl}`)
+    }
 
     const launcher = new Launcher({
-      root: 'Dominio Craft',
+      root: LAUNCHER_CONFIG.gameRoot,
       account: account,
       storage: 'shared',
       profile: {
-        slug: 'dominio',
+        slug: LAUNCHER_CONFIG.profileSlug,
         minecraft: {
-          version: '1.21.1',
+          version: LAUNCHER_CONFIG.minecraft.version,
           loader: {
-            loader: 'neoforge',
-            version: '21.1.248'
-          }
+            loader: LAUNCHER_CONFIG.minecraft.loader.loader,
+            version: LAUNCHER_CONFIG.minecraft.loader.version
+          },
+          ...(hasModpack ? { modpackUrl: LAUNCHER_CONFIG.modpackUrl } : {})
         }
       },
       cleaning: {

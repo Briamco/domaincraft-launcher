@@ -1,0 +1,35 @@
+[
+  {
+    "id": "1",
+    "title": "¡Bienvenidos a Dominio Craft!",
+    "content": "Estamos emocionados de inaugurar el servidor con **Minecraft 1.21.1** y **NeoForge 21.1.248**.\n\n### Novedades:\n- Modpack optimizado y sincronizado automáticamente desde nuestro CDN.\n- Modo offline y Microsoft disponibles.\n- Soporte para skins y capas personalizadas.\n\n¡Únete a nuestro Discord para participar en los eventos y recibir soporte!",
+    "author": {
+      "username": "Admin"
+    },
+    "createdAt": "2026-09-04T12:00:00.000Z",
+    "tags": [
+      {
+        "name": "Servidor",
+        "color": "#2ca845"
+      },
+      {
+        "name": "Lanzamiento",
+        "color": "#3498db"
+      }
+    ],
+    "image": "https://cdn.tudominio.com/images/news-banner.webp"
+  },
+  {
+    "id": "2",
+    "title": "Reglas y Recomendaciones",
+    "content": "Para una mejor experiencia en el juego:\n\n1. Asigna al menos **4 GB de RAM** en los ajustes si juegas con shaders.\n2. Respeta a los demás miembros de la comunidad.\n3. Reporta cualquier bug en el canal de soporte.",
+    "author": "Equipo Dominio",
+    "createdAt": "2026-09-03T18:30:00.000Z",
+    "tags": [
+      {
+        "name": "Información",
+        "color": "#e67e22"
+      }
+    ]
+  }
+]

@@ -1,0 +1,52 @@
+{
+  "files": [
+    {
+      "name": "jei-1.21.1-neoforge-19.21.0.246.jar",
+      "path": "mods/",
+      "url": "https://cdn.tudominio.com/mods/jei-1.21.1-neoforge-19.21.0.246.jar",
+      "sha1": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+      "size": 1542000,
+      "type": "MOD"
+    },
+    {
+      "name": "iris-neoforge-1.8.0+mc1.21.1.jar",
+      "path": "mods/",
+      "url": "https://cdn.tudominio.com/mods/iris-neoforge-1.8.0+mc1.21.1.jar",
+      "sha1": "7c4f4d2b38e079e0f3ff9efd0e6538b81ff7d1a2",
+      "size": 3210000,
+      "type": "MOD"
+    },
+    {
+      "name": "ComplementaryReimagined_r5.2.2.zip",
+      "path": "shaderpacks/",
+      "url": "https://cdn.tudominio.com/shaderpacks/ComplementaryReimagined_r5.2.2.zip",
+      "sha1": "e2fc714c4727ee9395f324cd2e7f331f9d9acc96",
+      "size": 4512000,
+      "type": "SHADERPACK"
+    },
+    {
+      "name": "DominioCraft_Textures_1.21.zip",
+      "path": "resourcepacks/",
+      "url": "https://cdn.tudominio.com/resourcepacks/DominioCraft_Textures_1.21.zip",
+      "sha1": "b5d7c3013131bf4f180f1a61261ea5a84265529b",
+      "size": 8920000,
+      "type": "RESOURCEPACK"
+    },
+    {
+      "name": "iris.properties",
+      "path": "config/",
+      "url": "https://cdn.tudominio.com/config/iris.properties",
+      "sha1": "8843d7f92416211de9ebb963ff4ce28125932878",
+      "size": 240,
+      "type": "CONFIG"
+    },
+    {
+      "name": "options.txt",
+      "path": "",
+      "url": "https://cdn.tudominio.com/options.txt",
+      "sha1": "356a192b7913b04c54574d18c28d46e6395428ab",
+      "size": 1240,
+      "type": "CONFIG"
+    }
+  ]
+}
