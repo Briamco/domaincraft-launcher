@@ -53,10 +53,17 @@ export function initHome() {
   let totalDownloadedByType: { type: string; size: number }[] = []
 
   const loadProfiles = async () => {
-    allProfiles = await profiles.get()
+    try {
+      allProfiles = (await profiles.get()) || []
+    } catch {
+      allProfiles = []
+    }
+
     if (allProfiles.length > 0) {
       selectProfile(allProfiles[0])
       renderDropdown()
+    } else {
+      selectProfile({ name: 'Dominio Craft', slug: 'dominio' })
     }
   }
 
@@ -97,10 +104,11 @@ export function initHome() {
     if (statusText) statusText.innerHTML = 'Pinging...'
     if (playerCount) playerCount.innerHTML = ''
 
-    const status = selectedProfile ? await server.getStatus(selectedProfile.ip, selectedProfile.port || 25565) : null
+    const status = selectedProfile?.ip ? await server.getStatus(selectedProfile.ip, selectedProfile.port || 25565) : null
 
     if (status) {
       if (statusDot) {
+        statusDot.style.display = 'block'
         statusDot.classList.remove('pinging', 'offline')
         statusDot.classList.add('online')
       }
@@ -109,12 +117,17 @@ export function initHome() {
       if (playerCount) {
         playerCount.innerHTML = `<i class="fa-fw fa-solid fa-users"></i>&nbsp;&nbsp;${status.players.online.toLocaleString()} / ${status.players.max.toLocaleString()}`
       }
-    } else {
+    } else if (selectedProfile?.ip) {
       if (statusDot) {
+        statusDot.style.display = 'block'
         statusDot.classList.remove('pinging', 'online')
         statusDot.classList.add('offline')
       }
       if (statusText) statusText.innerHTML = 'Offline'
+      if (playerCount) playerCount.innerHTML = ''
+    } else {
+      if (statusDot) statusDot.style.display = 'none'
+      if (statusText) statusText.innerHTML = 'NeoForge 1.21.1'
       if (playerCount) playerCount.innerHTML = ''
     }
   }

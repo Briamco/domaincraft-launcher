@@ -1,21 +1,29 @@
 import { ipcMain, BrowserWindow, app } from 'electron'
 import { Launcher } from 'eml-lib'
-import type { Account, IProfile } from 'eml-lib'
+import type { Account } from 'eml-lib'
 import type { IGameSettings } from './settings'
 import logger from 'electron-log/main'
-import { ADMINTOOL_URL } from '../const'
 
 export function registerLauncherHandlers(mainWindow: BrowserWindow) {
-  ipcMain.handle('game:launch', (_event, payload: { account: Account; settings: IGameSettings; profileSlug: string }) => {
-    const { account, settings, profileSlug } = payload
+  ipcMain.handle('game:launch', (_event, payload: { account: Account; settings: IGameSettings; profileSlug?: string }) => {
+    const { account, settings } = payload
     const java = settings.java === 'system' ? { install: 'manual' as const, absolutePath: 'java' } : { install: 'auto' as const }
     logger.log('Launching')
 
     const launcher = new Launcher({
-      url: ADMINTOOL_URL,
-      root: 'goldfrite',
-      profile: { slug: profileSlug },
+      root: 'Dominio Craft',
       account: account,
+      storage: 'shared',
+      profile: {
+        slug: 'dominio',
+        minecraft: {
+          version: '1.21.1',
+          loader: {
+            loader: 'neoforge',
+            version: '21.1.248'
+          }
+        }
+      },
       cleaning: {
         enabled: false
       },
