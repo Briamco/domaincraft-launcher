@@ -1,100 +1,126 @@
 # Dominio Launcher
 
-**Dominio Launcher es un lanzador moderno, rápido y multiplataforma para Minecraft.**
+<p align="center">
+  <img src="src/static/images/logo.png" alt="Dominio Launcher Logo" width="120" />
+</p>
 
-Powered by <a href="https://github.com/Electron-Minecraft-Launcher/EML-Lib-v2"><b>EML Lib</b></a>
+<h3 align="center">Lanzador moderno, rápido y multiplataforma para Minecraft</h3>
 
-[<img src="https://img.shields.io/badge/version-0.1.0-2ca845?style=for-the-badge&color=2ca845">](package.json)</p>
-
-<p>
-<center>
-<a href="https://emlproject.com/discord/github">
-  <img src="./.github/assets/gg.png" alt="EML AdminTool Logo" width="300"/>
-</a>
-</center>
+<p align="center">
+  <img src="https://img.shields.io/badge/versión-0.1.0-2ca845?style=for-the-badge" alt="Versión 0.1.0" />
+  <img src="https://img.shields.io/badge/Minecraft-1.21.1-2ca845?style=for-the-badge&logo=minecraft" alt="Minecraft 1.21.1" />
+  <img src="https://img.shields.io/badge/Loader-NeoForge_21.1.248-orange?style=for-the-badge" alt="NeoForge" />
+  <img src="https://img.shields.io/badge/Plataformas-Windows_|_macOS_|_Linux-0077DA?style=for-the-badge" alt="Plataformas" />
+  <img src="https://img.shields.io/badge/Licencia-MIT-lightgrey?style=for-the-badge" alt="Licencia" />
 </p>
 
 ---
 
-## Introduction
+## 📖 Descripción General
 
-**EML Template** acts as the frontend foundation for the _Electron Minecraft Launcher_ ecosystem. It is a pre-configured **Electron + Vite** application designed to provide the best possible gaming experience.
+**Dominio Launcher** es un lanzador personalizado de Minecraft diseñado para ofrecer la mejor experiencia de juego a la comunidad de **Dominio Craft**. Construido sobre **Electron**, **Vite** y **TypeScript**, combina un arranque ultrarrápido con sincronización de contenido en la nube y soporte nativo para jugadores **Offline (No Premium)** y **Microsoft**.
 
-It is engineered to work in perfect synergy with **EML Lib** (for the core logic) and **EML AdminTool** (for configuration).
+Powered by <a href="https://github.com/Electron-Minecraft-Launcher/EML-Lib-v2"><b>EML Lib</b></a>.
 
-## Features
+---
 
-- **Next-gen performance**: Built on **Vite**, offering instant startup and Hot-Module-Replacement (HMR).
-- **Microsoft authentication**: Full integration of the official authentication flow via EML Lib.
-- **Asset management**: Smart downloading of game files (Java, libraries, assets, mods) with hash validation, thanks to EML Lib and EML AdminTool (optional).
-- **Auto-update**: Automatic update system linked to your EML AdminTool instance.
-- **Skin & cape management**: View and equip skins and capes directly from the launcher.
+## ✨ Características Principales
 
-## Installation & Development
+- **🔓 Modo Dual de Autenticación**:
+  - **Modo Offline (No Premium / Cracked)**: Inicio de sesión instantáneo con validación de nickname, UUID determinístico y skins personalizadas.
+  - **Cuentas Microsoft**: Autenticación oficial OAuth y soporte completo para cuentas oficiales.
+- **⚡ NeoForge 1.21.1 Autónomo**:
+  - Instalación y ejecución automática del juego y el cargador de mods sin requerir software externo ni launchers intermedios.
+- **☁️ Sincronización Automática vía CDN**:
+  - Descarga y actualización automática de **Mods** (`mods/`), **Shaders** (`shaderpacks/`), **Paquetes de Texturas** (`resourcepacks/`) y **Configuraciones** (`config/`) mediante verificación por hash **SHA-1**.
+- **📰 Feed de Noticias en Vivo**:
+  - Noticias y eventos sincronizados en tiempo real desde tu CDN a través de un archivo `news.json` con soporte para Markdown, tags de colores e imágenes.
+- **🎨 Interfaz Inspirada en Minecraft**:
+  - Paleta oficial gris oscuro (`#242424` / `#181818`) y acentos en verde esmeralda (`#2ca845`). Fondo personalizado con efecto glassmorphism y cobertura completa de ventana.
+- **☕ Java Automático**:
+  - Detección e instalación automática del Java JRE requerido en segundo plano.
+- **🛠️ Generador de Manifiestos CLI**:
+  - Incluye herramienta para escanear tus mods locales y generar el `modpack.json` para tu CDN en segundos con un solo comando.
 
-### Prerequisites
+---
 
-Before starting, ensure you have installed:
+## 🚀 Inicio Rápido en Desarrollo
 
-- **Node.js** (v18 or higher recommended)
-- **npm** (or Yarn/Pnpm)
+### Requisitos Previos
+- **Node.js** (v18, v20 o v22 LTS recomendado)
+- **npm** (incluido con Node.js)
 
-### Setup
+### Instalación
 
-1.  Clone the repository:
+1. Clona el repositorio:
+   ```bash
+   git clone https://github.com/Briamco/domaincraft-launcher.git
+   cd domaincraft-launcher
+   ```
 
-    ```bash
-    git clone https://github.com/Electron-Minecraft-Launcher/EML-Template.git
-    cd EML-Template
-    ```
+2. Instala las dependencias:
+   ```bash
+   npm install
+   ```
 
-2.  Install dependencies:
+3. Copia el archivo de entorno y configura tu CDN (opcional en desarrollo):
+   ```bash
+   cp .env.example .env
+   ```
 
-    ```bash
-    npm install
-    ```
+4. Inicia la aplicación en modo desarrollo:
+   ```bash
+   npm run dev
+   ```
 
-    _Note: This will automatically install `eml-lib` and build tools._
+---
 
-3.  Start in Development mode:
+## ⚙️ Configuración del CDN (.env)
 
-    ```bash
-    npm run dev
-    ```
+Puedes configurar las URLs de tu servidor o CDN directamente en el archivo `.env`:
 
-    An Electron window will open with hot-reloading enabled.
+```env
+# URL base de tu CDN (Cloudflare R2, S3, Nginx, etc.)
+VITE_CDN_URL=https://cdn.tudominio.com
 
-## Configuration
+# URL directa al manifiesto de mods (modpack.json)
+VITE_MODPACK_URL=https://cdn.tudominio.com/modpack.json
 
-### Link to your EML AdminTool instance
-
-Modify the configuration file (`electron/const.ts`) to point to your distribution URL generated by **EML AdminTool**.
+# URL directa al feed de noticias (news.json)
+VITE_NEWS_URL=https://cdn.tudominio.com/news.json
+```
 
 > [!TIP]
-> Since EML Lib v2.2.0, you can use EML Template without an EML AdminTool instance by providing a custom configuration object directly in the code. However, using EML AdminTool is recommended for easier management and updates.
+> Si no defines las variables de modpack o noticias, el launcher asumirá por defecto `${VITE_CDN_URL}/modpack.json` y `${VITE_CDN_URL}/news.json`.
 
-### Icon customization
+---
 
-To change the visual identity, replace the files in the `build/` folder:
+## 🛠️ Scripts y Comandos Disponibles
 
-- `icon.png`: Standard icon (512x512).
-- `icon.ico`: For Windows.
-- `icon.icns`: For macOS (Legacy & Liquid Glass fallback).
-- `background.png`: DMG Installer background (macOS).
+| Comando | Descripción |
+| ------- | ----------- |
+| `npm run dev` | Inicia el launcher en modo desarrollo con Hot Module Replacement (HMR) |
+| `npm run build` | Compila TypeScript y genera los bundles de producción con Vite |
+| `npm run generate:modpack` | Escanea una carpeta de mods y genera el archivo `modpack.json` con hashes SHA-1 |
+| `npm run release:win` | Empaqueta y genera el instalador ejecutable `.exe` (NSIS) para **Windows** |
+| `npm run release:mac` | Empaqueta el instalador `.dmg` para **macOS** |
+| `npm run release:lin` | Empaqueta instaladores `.AppImage`, `.deb` y `.rpm` para **Linux** |
 
-### Build (distribution)
+---
 
-To create the final executables for distribution:
+## 📚 Documentación Detallada
 
-| Platform | Command               | Output format               |
-| -------- | --------------------- | --------------------------- |
-| Windows  | `npm run release:win` | `.exe` (NSIS Installer)     |
-| macOS    | `npm run release:mac` | `.dmg` (Disk Image)         |
-| Linux    | `npm run release:lin` | `.AppImage`, `.deb`, `.rpm` |
+Hemos preparado guías especializadas dentro de la carpeta [docs/](docs/):
 
-Compiled files will be located in the `release/` folder.
+- 🌐 [**Guía de CDN y Modpacks**](docs/CDN_Y_MODPACK.md): Cómo alojar tus archivos en Cloudflare R2 o S3, redactar noticias, organizar mods, shaders, texturas y usar el generador automático.
+- 🏛️ [**Arquitectura del Sistema**](docs/ARQUITECTURA.md): Explicación técnica del proceso Electron Main, capa Preload, Renderer, autenticación offline y ciclo de vida de ejecución.
+- 📦 [**Compilación y Distribución**](docs/COMPILACION_Y_DISTRIBUCION.md): Paso a paso para empaquetar el instalador `.exe` de Windows, personalizar los iconos y distribuir el juego a tus jugadores.
 
-## Contributing
+---
 
-Contributions are welcome! For major changes, please open an issue first to discuss what you would like to change.
+## 📄 Licencia y Créditos
 
+Este proyecto está bajo la licencia **MIT**. Consulta el archivo [LICENSE](LICENSE) para más detalles.
+
+- Desarrollado para **Dominio Craft**.
+- Motor de lanzamiento impulsado por [EML Lib](https://github.com/Electron-Minecraft-Launcher/EML-Lib-v2).
