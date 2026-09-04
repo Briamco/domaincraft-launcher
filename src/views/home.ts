@@ -14,9 +14,11 @@ marked.use({
   }
 })
 
-const formatDate = (dateString: string) => {
+const formatDate = (dateString?: string | Date) => {
+  if (!dateString) return new Date().toLocaleDateString('es-ES', { month: 'short', day: 'numeric', year: 'numeric' })
   const date = new Date(dateString)
-  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+  if (isNaN(date.getTime())) return new Date().toLocaleDateString('es-ES', { month: 'short', day: 'numeric', year: 'numeric' })
+  return date.toLocaleDateString('es-ES', { month: 'short', day: 'numeric', year: 'numeric' })
 }
 
 const parseNews = (rawContent: string) =>
@@ -24,11 +26,14 @@ const parseNews = (rawContent: string) =>
     ADD_ATTR: ['target']
   })
 
-const backgroundColor = (color: string) => {
+const backgroundColor = (color?: string) => {
+  if (!color || !color.startsWith('#') || color.length < 7) {
+    return 'rgba(44, 168, 69, 0.15)'
+  }
   const r = parseInt(color.slice(1, 3), 16)
   const g = parseInt(color.slice(3, 5), 16)
   const b = parseInt(color.slice(5, 7), 16)
-  return `rgba(${r}, ${g}, ${b}, 0.1)`
+  return `rgba(${r}, ${g}, ${b}, 0.15)`
 }
 
 export function initHome() {
@@ -52,19 +57,24 @@ export function initHome() {
   let totalToDownload = 0
   let totalDownloadedByType: { type: string; size: number }[] = []
 
+  const DEFAULT_PROFILE = {
+    id: 'dominio-neoforge-1-21-1',
+    name: 'NeoForge 1.21.1',
+    slug: 'dominio',
+    isDefault: true
+  }
+
   const loadProfiles = async () => {
     try {
-      allProfiles = (await profiles.get()) || []
+      const fetched = await profiles.get()
+      allProfiles = fetched && fetched.length > 0 ? fetched : [DEFAULT_PROFILE]
     } catch {
-      allProfiles = []
+      allProfiles = [DEFAULT_PROFILE]
     }
 
-    if (allProfiles.length > 0) {
-      selectProfile(allProfiles[0])
-      renderDropdown()
-    } else {
-      selectProfile({ name: 'Dominio Craft', slug: 'dominio' })
-    }
+    const defaultProfile = allProfiles.find((p) => p.isDefault) || allProfiles[0]
+    selectProfile(defaultProfile)
+    renderDropdown()
   }
 
   const renderDropdown = () => {
@@ -134,40 +144,57 @@ export function initHome() {
 
   const loadNews = async () => {
     if (!newsList) return
-    newsList.innerHTML = '<div style="text-align:center; padding: 20px; color: #888;">Loading news...</div>'
+    newsList.innerHTML = '<div style="text-align:center; padding: 20px; color: #888;"><i class="fa-solid fa-circle-notch fa-spin"></i>&nbsp;&nbsp;Cargando noticias...</div>'
     const feed = await news.getNews()
 
     newsList.innerHTML = ''
 
     if (!feed || feed.length === 0) {
-      newsList.innerHTML = '<div style="text-align:center; color: #888;">No news available.</div>'
+      newsList.innerHTML = `
+        <div style="text-align:center; padding: 40px 20px; color: #888;">
+          <i class="fa-solid fa-newspaper" style="font-size: 30px; margin-bottom: 12px; opacity: 0.4;"></i>
+          <p style="font-size: 14px; margin-bottom: 4px; color: #ccc;">No hay noticias disponibles por el momento.</p>
+          <small style="opacity: 0.6;">Las novedades y eventos del servidor se sincronizarán aquí.</small>
+        </div>
+      `
       return
     }
 
     feed.forEach((item: any) => {
       let tagsHTML = ''
-      item.tags.forEach((tag: any) => {
-        tagsHTML += `<span class="tag" style="color: ${tag.color}; background-color: ${backgroundColor(tag.color)}">${tag.name}</span>`
-      })
+      if (Array.isArray(item.tags)) {
+        item.tags.forEach((tag: any) => {
+          if (typeof tag === 'string') {
+            tagsHTML += `<span class="tag" style="color: #2ca845; background-color: rgba(44, 168, 69, 0.15)">${tag}</span>`
+          } else if (tag && tag.name) {
+            const color = tag.color || '#2ca845'
+            tagsHTML += `<span class="tag" style="color: ${color}; background-color: ${backgroundColor(color)}">${tag.name}</span>`
+          }
+        })
+      }
+
+      const authorName = typeof item.author === 'string'
+        ? item.author
+        : item.author?.username || 'Dominio Craft'
+
       const articleHTML = `
         <article class="news-article">
           <div class="article-meta">
             <div class="author">
-              <img src="https://minotar.net/helm/${item.author.username}/24" alt="Author" />
-              <span>${item.author.username ?? 'Admin Team'}</span>
+              <img src="https://minotar.net/helm/${authorName}/24" alt="Author" onerror="this.src='https://minotar.net/helm/Steve/24'"/>
+              <span>${authorName}</span>
             </div>
             <span class="separator">•</span>
             <span class="date">${formatDate(item.createdAt)}</span>
-            <span class="separator">•</span>
-            <div class="tags-container">${tagsHTML}</div>
+            ${tagsHTML ? `<span class="separator">•</span><div class="tags-container">${tagsHTML}</div>` : ''}
           </div>
 
-          <h3>${item.title}</h3>
+          <h3>${item.title || 'Novedades'}</h3>
           
           ${item.image ? `<img src="${item.image}" alt="News Image" onerror="this.style.display='none'"/>` : ''}
 
           <div class="article-content">
-            ${parseNews(item.content)}
+            ${parseNews(item.content || '')}
           </div>
         </article>
       `
@@ -232,15 +259,36 @@ Ready to launch the game with the following settings:
     }
   })
 
+  const getDownloadTypeLabel = (type: string) => {
+    switch (type) {
+      case 'JAVA':
+        return 'Descargando Java...'
+      case 'MOD':
+        return 'Descargando mods...'
+      case 'SHADERPACK':
+        return 'Descargando shaders...'
+      case 'RESOURCEPACK':
+        return 'Descargando paquetes de recursos...'
+      case 'CONFIG':
+        return 'Descargando configuraciones...'
+      case 'ASSET':
+        return 'Descargando recursos...'
+      case 'LIBRARY':
+        return 'Descargando librerías...'
+      default:
+        return 'Descargando archivos del juego...'
+    }
+  }
+
   game.launchComputeDownload(() => {
     setIndeterminate(true)
-    if (progressLabel) progressLabel.innerText = 'Preparing download...'
+    if (progressLabel) progressLabel.innerText = 'Preparando descarga...'
     if (progressPercent) progressPercent.innerText = ''
   })
   game.launchDownload((download) => {
     setIndeterminate(false)
     totalToDownload = download.total.size
-    if (progressLabel) progressLabel.innerText = `Downloading files...`
+    if (progressLabel) progressLabel.innerText = 'Descargando archivos...'
   })
   game.downloadProgress((progress) => {
     if (!totalDownloadedByType.find((t) => t.type === progress.type)) {
@@ -251,13 +299,13 @@ Ready to launch the game with the following settings:
     if (progressBar && progressLabel && progressPercent) {
       const downloadedSum = totalDownloadedByType.reduce((acc, curr) => acc + curr.size, 0)
       progressBar.style.width = `${Math.min((downloadedSum / totalToDownload) * 100, 100)}%`
-      progressLabel.innerText = `Downloading ${progress.type === 'JAVA' ? 'Java' : 'game files'}...`
+      progressLabel.innerText = getDownloadTypeLabel(progress.type)
       progressPercent.innerText = `${Math.round(Math.min((downloadedSum / totalToDownload) * 100, 100))}%`
     }
   })
   game.launchInstallLoader(() => {
     setIndeterminate(true)
-    if (progressLabel) progressLabel.innerText = 'Extracting files...'
+    if (progressLabel) progressLabel.innerText = 'Instalando modloader...'
     if (progressPercent) progressPercent.innerText = ''
   })
   game.launchExtractNatives(() => {
