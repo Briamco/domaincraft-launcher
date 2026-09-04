@@ -5,13 +5,14 @@ import fs from 'node:fs'
 import logger from 'electron-log/main'
 
 let skin: Skin | null = null
+let currentAccount: Account | null = null
 const skinPath = path.join(app.getPath('userData'), 'skins.json')
 const DEFAULT_SKINS: ISkin[] = [
   {
     id: 'steve',
     url: 'http://textures.minecraft.net/texture/31f477eb1a7beee631c2ca64d06f8f68fa93a3386d04452ab27f43acdf1b60cb',
     variant: 'classic',
-    state: 'inactive'
+    state: 'active'
   },
   {
     id: 'alex',
@@ -23,6 +24,14 @@ const DEFAULT_SKINS: ISkin[] = [
 
 export function registerSkinHandlers() {
   ipcMain.handle('skin:reload', async (_event, account?: Account) => {
+    if (account) {
+      currentAccount = account
+    }
+
+    if (currentAccount?.meta?.type === 'crack') {
+      return null
+    }
+
     if (!skin && account) {
       skin = new Skin(account)
       await skin.reload()
@@ -35,6 +44,14 @@ export function registerSkinHandlers() {
   })
 
   ipcMain.handle('skin:get_skin', async (_event, account?: Account) => {
+    if (account) {
+      currentAccount = account
+    }
+
+    if (currentAccount?.meta?.type === 'crack') {
+      return await getSkins(true)
+    }
+
     if (account && !skin) {
       skin = new Skin(account)
     } else if (!account && !skin) {
@@ -46,6 +63,14 @@ export function registerSkinHandlers() {
   })
 
   ipcMain.handle('skin:get_cape', async (_event, account?: Account) => {
+    if (account) {
+      currentAccount = account
+    }
+
+    if (currentAccount?.meta?.type === 'crack') {
+      return []
+    }
+
     if (account && !skin) {
       skin = new Skin(account)
     } else if (!account && !skin) {
@@ -57,6 +82,14 @@ export function registerSkinHandlers() {
   })
 
   ipcMain.handle('skin:get_avatar', async (_event, account?: Account) => {
+    if (account) {
+      currentAccount = account
+    }
+
+    if (currentAccount?.meta?.type === 'crack') {
+      return { url: `https://minotar.net/avatar/${currentAccount.name}/256.png` }
+    }
+
     if (account && !skin) {
       skin = new Skin(account)
     } else if (!account && !skin) {
@@ -74,6 +107,24 @@ export function registerSkinHandlers() {
   })
 
   ipcMain.handle('skin:update_skin', async (_event, source: string | ArrayBuffer, model?: 'classic' | 'slim') => {
+    if (currentAccount?.meta?.type === 'crack') {
+      let skinUrl: string
+      if (typeof source === 'string') {
+        skinUrl = source
+      } else {
+        const buffer = Buffer.from(source)
+        skinUrl = `data:image/png;base64,${buffer.toString('base64')}`
+      }
+      const newSkin: ISkin = {
+        id: `custom_${Date.now()}`,
+        url: skinUrl,
+        variant: model || 'classic',
+        state: 'active'
+      }
+      await appendSkin(newSkin)
+      return await getSkins(true, [newSkin])
+    }
+
     if (!skin) {
       return { success: false, error: 'No skin loaded' }
     }

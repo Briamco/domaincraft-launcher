@@ -27,7 +27,7 @@ export function logout() {
 }
 
 async function updateUserInterface() {
-  if (!shared.account || !shared.skins) return
+  if (!shared.account) return
 
   logger.log('Updating UI for user:', shared.account.name)
 
@@ -37,6 +37,7 @@ async function updateUserInterface() {
   const uuidSettingsEl = document.getElementById('settings-user-uuid')
   const typeSettingsEl = document.getElementById('settings-user-type')
   const avatarSettingsEl = document.getElementById('settings-user-avatar') as HTMLImageElement
+  const xboxBtn = document.getElementById('btn-manage-xbox')
 
   if (nameEl) nameEl.innerText = shared.account.name
   if (avatarEl) avatarEl.src = shared.avatar?.url ?? 'https://minotar.net/avatar/steve/256.png'
@@ -44,6 +45,7 @@ async function updateUserInterface() {
   if (uuidSettingsEl) uuidSettingsEl.innerText = `UUID: ${shared.account.uuid}`
   if (typeSettingsEl) typeSettingsEl.innerHTML = getAccountIcon(shared.account.meta.type)
   if (avatarSettingsEl) avatarSettingsEl.src = shared.avatar?.url ?? 'https://minotar.net/avatar/steve/256.png'
+  if (xboxBtn) xboxBtn.style.display = shared.account.meta.type === 'crack' ? 'none' : 'inline-flex'
 
   shared.resetMainView()
   shared.resetSkinViews()
@@ -86,13 +88,13 @@ export function closeOverlay(view: ViewName) {
 function getAccountIcon(type: 'msa' | 'yggdrasil' | 'azuriom' | 'crack') {
   switch (type) {
     case 'msa':
-      return '<i class="fa-brands fa-microsoft"></i>Microsoft account'
+      return '<i class="fa-brands fa-microsoft"></i>&nbsp;&nbsp;Microsoft account'
     case 'yggdrasil':
-      return '<i class="fa-solid fa-user"></i>Yggdrasil account'
+      return '<i class="fa-solid fa-user"></i>&nbsp;&nbsp;Yggdrasil account'
     case 'azuriom':
-      return '<i class="fa-brands fa-globe"></i>Azuriom account'
+      return '<i class="fa-brands fa-globe"></i>&nbsp;&nbsp;Azuriom account'
     case 'crack':
-      return '<i class="fa-solid fa-user-slash"></i>Cracked account'
+      return '<i class="fa-solid fa-user-astronaut"></i>&nbsp;&nbsp;Modo Offline'
     default:
       return 'Unknown account type'
   }

@@ -26,6 +26,7 @@ declare global {
     api: {
       auth: {
         login: () => Promise<IAuthResponse>
+        loginOffline: (username: string) => Promise<IAuthResponse>
         refresh: () => Promise<IAuthResponse>
         logout: () => Promise<{ success: boolean }>
       }
@@ -117,6 +118,7 @@ declare global {
 
 export const auth = {
   login: async () => await window.api.auth.login(),
+  loginOffline: async (username: string) => await window.api.auth.loginOffline(username),
   logout: async () => await window.api.auth.logout(),
   refresh: async () => await window.api.auth.refresh()
 }

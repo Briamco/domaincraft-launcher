@@ -25,6 +25,7 @@ console.log('Preload script loaded')
 contextBridge.exposeInMainWorld('api', {
   auth: {
     login: (): Promise<IAuthResponse> => ipcRenderer.invoke('auth:login'),
+    loginOffline: (username: string): Promise<IAuthResponse> => ipcRenderer.invoke('auth:login_offline', username),
     refresh: (): Promise<IAuthResponse> => ipcRenderer.invoke('auth:refresh'),
     logout: (): Promise<{ success: boolean }> => ipcRenderer.invoke('auth:logout')
   },
